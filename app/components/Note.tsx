@@ -18,7 +18,7 @@ export default function Note() {
           fontSize: '18px',
         }}
       >
-        No notes yet
+        No selected note
       </div>
     );
 
