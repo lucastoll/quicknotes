@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   type ReactNode,
+  useEffect,
 } from 'react';
 
 export interface NoteData {
@@ -34,25 +35,19 @@ export function useNotes() {
 }
 
 export function NotesProvider({ children }: { children: ReactNode }) {
-  const [notes, setNotes] = useState<NoteData[]>(() => {
-    if (typeof window === 'undefined') return [];
+  const [notes, setNotes] = useState<NoteData[]>([]);
+
+  useEffect(() => {
     const savedNotes = localStorage.getItem('quicknotes');
+
     if (savedNotes) {
-      return JSON.parse(savedNotes).map((n: NoteData) => ({
-        ...n,
-        title: n.title || 'Untitled Note',
-        updatedAt: n.updatedAt || Date.now(),
-      }));
+      try {
+        setNotes(JSON.parse(savedNotes));
+      } catch {
+        console.log('Error parsing notes');
+      }
     }
-    return [
-      {
-        id: Date.now().toString(),
-        title: 'My First Note',
-        content: 'Click to start writing...',
-        updatedAt: Date.now(),
-      },
-    ];
-  });
+  }, []);
 
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null;
