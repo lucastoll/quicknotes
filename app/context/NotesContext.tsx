@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 
-interface NoteData {
+export interface NoteData {
   id: string;
   title: string;
   content: string;

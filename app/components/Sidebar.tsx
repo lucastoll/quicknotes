@@ -1,9 +1,29 @@
 'use client';
 
-import { useNotes } from '../context/NotesContext';
+import { useState } from 'react';
+import { NoteData, useNotes } from '../context/NotesContext';
 
 export default function Sidebar() {
   const { notes, selectedNote, selectNote, deleteNote, addNote } = useNotes();
+
+  const [filteredNotes, setFilteredNotes] = useState<NoteData[]>(notes);
+  const [input, setInput] = useState<string>('');
+
+  function handleNotesFilter(notes: NoteData[], value: string) {
+    setInput(value);
+
+    if (value === '') {
+      setFilteredNotes(notes);
+    }
+
+    const filterNotes = notes?.filter(
+      (element: NoteData) =>
+        element?.content?.toLowerCase().includes(value.toLowerCase()) ||
+        element?.title?.toLowerCase().includes(value.toLowerCase()),
+    );
+
+    setFilteredNotes(filterNotes);
+  }
 
   return (
     <div
@@ -47,7 +67,22 @@ export default function Sidebar() {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {notes.map((note) => (
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => handleNotesFilter(notes, e.target.value)}
+          placeholder="Search notes"
+          style={{
+            width: '100%',
+            padding: '8px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#000000',
+            fontFamily: 'inherit',
+            marginBottom: '12px',
+          }}
+        />
+        {filteredNotes.map((note) => (
           <div
             key={note.id}
             onClick={() => selectNote(note.id)}
