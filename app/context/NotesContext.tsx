@@ -12,6 +12,7 @@ interface NoteData {
   id: string;
   title: string;
   content: string;
+  updatedAt: number;
 }
 
 interface NotesContextType {
@@ -40,6 +41,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
       return JSON.parse(savedNotes).map((n: NoteData) => ({
         ...n,
         title: n.title || 'Untitled Note',
+        updatedAt: n.updatedAt || Date.now(),
       }));
     }
     return [
@@ -47,6 +49,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
         id: Date.now().toString(),
         title: 'My First Note',
         content: 'Click to start writing...',
+        updatedAt: Date.now(),
       },
     ];
   });
@@ -99,6 +102,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
       id: Date.now().toString(),
       title: 'Untitled Note',
       content: '',
+      updatedAt: Date.now(),
     };
     const updatedNotes = [...notes, newNote];
     setNotes(updatedNotes);
@@ -126,7 +130,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
 
   const updateTitle = (id: string, title: string) => {
     const updatedNotes = notes.map((note) =>
-      note.id === id ? { ...note, title } : note,
+      note.id === id ? { ...note, title, updatedAt: Date.now() } : note,
     );
     setNotes(updatedNotes);
     saveToLocalStorage(updatedNotes, selectedNoteId);
@@ -134,7 +138,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
 
   const updateContent = (id: string, content: string) => {
     const updatedNotes = notes.map((note) =>
-      note.id === id ? { ...note, content } : note,
+      note.id === id ? { ...note, content, updatedAt: Date.now() } : note,
     );
     setNotes(updatedNotes);
     saveToLocalStorage(updatedNotes, selectedNoteId);

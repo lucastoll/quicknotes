@@ -5,7 +5,22 @@ import { useNotes } from '../context/NotesContext';
 export default function Note() {
   const { selectedNote, updateTitle, updateContent } = useNotes();
 
-  if (!selectedNote) return null;
+  if (!selectedNote)
+    return (
+      <div
+        style={{
+          padding: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '200px',
+          color: '#71717a',
+          fontSize: '18px',
+        }}
+      >
+        No notes yet
+      </div>
+    );
 
   return (
     <div style={{ padding: '20px' }}>
@@ -36,6 +51,16 @@ export default function Note() {
             marginBottom: '12px',
           }}
         />
+        <span
+          style={{
+            fontSize: '12px',
+            color: '#71717a',
+            marginBottom: '12px',
+            display: 'block',
+          }}
+        >
+          Last edited: {new Date(selectedNote.updatedAt).toLocaleString()}
+        </span>
         <textarea
           value={selectedNote.content}
           onChange={(e) => updateContent(selectedNote.id, e.target.value)}

@@ -66,19 +66,35 @@ export default function Sidebar() {
                   : '1px solid transparent',
             }}
           >
-            <span
+            <div
               style={{
-                fontSize: '14px',
-                color: '#000',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
                 flex: 1,
                 marginRight: '8px',
               }}
             >
-              {note.title || 'Untitled Note'}
-            </span>
+              <span
+                style={{
+                  fontSize: '14px',
+                  color: '#000',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  display: 'block',
+                }}
+              >
+                {note.title || 'Untitled Note'}
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: '#71717a',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {new Date(note.updatedAt).toLocaleString()}
+              </span>
+            </div>
             <button
               onClick={(e) => {
                 e.stopPropagation();
