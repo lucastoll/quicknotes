@@ -1,26 +1,10 @@
 'use client';
 
-interface NoteData {
-  id: string;
-  title: string;
-  content: string;
-}
+import { useNotes } from '../context/NotesContext';
 
-interface SidebarProps {
-  notes: NoteData[];
-  selectedNoteId: string | null;
-  onSelectNote: (id: string) => void;
-  onDeleteNote: (id: string) => void;
-  onAddNote: () => void;
-}
+export default function Sidebar() {
+  const { notes, selectedNote, selectNote, deleteNote, addNote } = useNotes();
 
-export default function Sidebar({
-  notes,
-  selectedNoteId,
-  onSelectNote,
-  onDeleteNote,
-  onAddNote,
-}: SidebarProps) {
   return (
     <div
       style={{
@@ -43,7 +27,7 @@ export default function Sidebar({
       >
         <h2 style={{ margin: 0, fontSize: '18px', color: '#000' }}>Notes</h2>
         <button
-          onClick={onAddNote}
+          onClick={addNote}
           style={{
             backgroundColor: '#facc15',
             border: 'none',
@@ -66,7 +50,7 @@ export default function Sidebar({
         {notes.map((note) => (
           <div
             key={note.id}
-            onClick={() => onSelectNote(note.id)}
+            onClick={() => selectNote(note.id)}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -75,9 +59,9 @@ export default function Sidebar({
               borderRadius: '8px',
               cursor: 'pointer',
               backgroundColor:
-                note.id === selectedNoteId ? '#fde047' : 'transparent',
+                note.id === selectedNote?.id ? '#fde047' : 'transparent',
               border:
-                note.id === selectedNoteId
+                note.id === selectedNote?.id
                   ? '1px solid #eab308'
                   : '1px solid transparent',
             }}
@@ -98,7 +82,7 @@ export default function Sidebar({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onDeleteNote(note.id);
+                deleteNote(note.id);
               }}
               style={{
                 backgroundColor: 'transparent',

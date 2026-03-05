@@ -1,23 +1,11 @@
 'use client';
 
-interface NoteData {
-  id: string;
-  title: string;
-  content: string;
-}
+import { useNotes } from '../context/NotesContext';
 
-interface NoteProps {
-  note: NoteData | null;
-  onTitleChange: (id: string, newTitle: string) => void;
-  onContentChange: (id: string, newContent: string) => void;
-}
+export default function Note() {
+  const { selectedNote, updateTitle, updateContent } = useNotes();
 
-export default function Note({
-  note,
-  onTitleChange,
-  onContentChange,
-}: NoteProps) {
-  if (!note) return null;
+  if (!selectedNote) return null;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -33,8 +21,8 @@ export default function Note({
       >
         <input
           type="text"
-          value={note.title}
-          onChange={(e) => onTitleChange(note.id, e.target.value)}
+          value={selectedNote.title}
+          onChange={(e) => updateTitle(selectedNote.id, e.target.value)}
           placeholder="Note Title"
           style={{
             width: '100%',
@@ -49,10 +37,10 @@ export default function Note({
           }}
         />
         <textarea
-          value={note.content}
-          onChange={(e) => onContentChange(note.id, e.target.value)}
+          value={selectedNote.content}
+          onChange={(e) => updateContent(selectedNote.id, e.target.value)}
           onClick={(e) => {
-            if (note.content === 'Click to start writing...') {
+            if (selectedNote.content === 'Click to start writing...') {
               (e.target as HTMLTextAreaElement).select();
             }
           }}
